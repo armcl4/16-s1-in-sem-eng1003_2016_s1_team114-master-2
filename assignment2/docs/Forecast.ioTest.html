@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ForecastIo Test</title>
+    <title>ForecastIOTest</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
-    <style>
+    <style> 
     .full-width{
         width: 100%;
     }
@@ -44,7 +44,7 @@
     var data = {
         latitude: -37.9115568, 
         longitude: 145.1340114,
-        //time: "",
+        time: "2013-05-06T12:00:00-0400",
         callback: "displayWeather"
     };    
     forecastIOKey = "d5ad10dfaecc9029172149631f0f9725"
@@ -55,15 +55,50 @@
     {
         // Build URL parameters from data object.
         var params = "";
-
         
         var script = document.createElement('script');
-        script.src = url + forecastIOKey + "/" + data.latitude +","+data.longitude+"?callback="+data.callback;
+        script.src = url + forecastIOKey + "/" + data.latitude +","+data.longitude+","+data.time+"?units=si&callback="+data.callback;
         document.body.appendChild(script);
     }
         
     function displayWeather( weatherData )
     {
+        // data from above function is fed into this
+        
+        // make an object that stores the latitude, longitude and forecast stuff
+        
+        // we get from the callback of the URL a large object, which contains many objects. Code to pick out the information we need from the object. 
+        
+        weatherData.timezone; 
+        //var summary, temperatureMin, temperatureMax, humidity, windspeed, moonphase;
+        //var dataFetch = [ summary, temperatureMin, temperatureMax, humidity, windspeed, moonphase];
+        forecastForLocationWeatherCache= {};
+        //console.log(weatherData.daily.data[0]);
+        
+        /*for(var item in dataFetch){
+            forecastForLocationWeatherCache[item] = weatherData.daily.data[0][item];
+            console.log(weatherData.daily.data[0].item);
+        };*/
+        
+        console.log(weatherData.daily.data[0].summary); 
+        weatherData.daily.data[0].temperatureMin; 
+        weatherData.daily.data[0].temperatureMax; 
+        weatherData.daily.data[0].humidity;
+        weatherData.daily.data[0].windspeed;
+        weatherData.daily.data[0].moonphase; 
+        
+        
+       // localStorage.setItem('location', locationstr)
+        
+        console.log(weatherData.timezone + weatherData.currently.humidity);
+        
+        
+       // locations[index].forecasts.[latitude, longitude, data] = {'theweatherdata'}.
+        
+    // we need the human readble text summary of current conditions e.g. party cloudy
+    // min temp, max temp, the humidity, the wind speed. 
+        
+        
         var listHTML = "";
         for(key in weatherData)
         {
@@ -72,59 +107,9 @@
         }
         weatherDataElement.innerHTML = listHTML;
     }
+    
         
     
-  
-/*    function routesResponse(routesArray)
-    {
-        routes = routesArray;
-        
-        // List view section heading: Flight list
-        var listHTML = "";
-
-        //   PART 1:
-        // ADD CODE HERE TO ITERATE OVER ROUTES ARRAY AND CREATE
-        // LIST ITEMS FOR EACH ROUTE (AS BELOW)
-        for( var i = 0; i< routes.length; i++)
-        {
-        // HTML Format of list item is:
-        //   <tr> <td onmousedown=\"listRowTapped("+i+")\" class=\"full-width mdl-data-table__cell--non-numeric\">"[SOURCE AIRPORT] -> [DEST AIRPORT]
-        //   <div class="subtitle">[AIRLINE CODE], Stops: [STOPS]</div></td></tr>
-        // 
-        listHTML += "<tr> <td onmousedown=\"listRowTapped("+i+")\" class=\"full-width mdl-data-table__cell--non-numeric\">" + routes[i].sourceAirport + " &rarr; " + routes[i].destinationAirport;
-        listHTML += "<div class=\"subtitle\">" + routes[i].airline + ", Stops: " + routes[i].stops +"</div></td></tr>";
-        
-        }
-
-        // Insert the list view elements into the flights list.
-        flightsListElement.innerHTML = listHTML;
-
-    }*/
-    
-    function airportResponse(airport)
-    {
-        var message = "Name: " + airport.name + "\n";
-        message += "Location: " + airport.city + ", " + airport.country;
-        alert(message);
-    }
- 
-    function listRowTapped(routeIndex)
-    {
-        
-        console.log(routes[routeIndex].destinationAirport + "(" + routes[routeIndex].destinationAirportId + ")");
-
-        //   PART 2:
-        // ADD CODE HERE TO REQUEST AIRPORT INFORMATION
-        var data=
-        {
-            id : routes[routeIndex].destinationAirportId,
-            callback: "airportResponse"
-        }
-        jsonpRequest("http://eng1003.eng.monash.edu/OpenFlights/airport/", data);
-    }
-
-
-        
     </script>
   </body>
 </html>
